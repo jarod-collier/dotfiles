@@ -4,11 +4,20 @@ if [ -f ~/.bash_aliases ]; then
 fi
 
 ########################################################################
+# Git prompt support
+########################################################################
+
+if [ -f /usr/lib/git-core/git-sh-prompt ]; then
+    source /usr/lib/git-core/git-sh-prompt
+elif [ -f /usr/share/git/completion/git-prompt.sh ]; then
+    source /usr/share/git/completion/git-prompt.sh
+fi
+
+########################################################################
 # Prompt
 ########################################################################
 
-# Show the current Git branch in the prompt
-export PS1='\u@\h:\w$(__git_ps1 " (%s)")\$ '
+export PS1='\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[35m\]$(__git_ps1 " (%s)")\[\033[00m\]\$ '
 
 ########################################################################
 # General aliases
@@ -28,6 +37,14 @@ alias e='explorer'
 
 alias bashrc='vim ~/.bashrc'
 alias vimrc='vim ~/.vimrc'
+
+# Using the dotfiles for all users bashrc and vimrc
+alias brc='dotfiles; vim bashrc; cd -'
+alias vrc='dotfiles; vim vimrc; cd -'
+
+alias sbrc='source ~/.bashrc'
+
+alias s='sudo --preserve-env=DISPLAY,XAUTHORITY -u steam -s'
 
 ########################################################################
 # Navigation helpers
@@ -51,44 +68,19 @@ hw() {
 export hw
 
 ########################################################################
-# Windows compatibility
-########################################################################
-
-# Git Bash didn't support man pages.
-# This simply called "<command> --help".
-man() {
-    "$1" --help
-}
-export man
-
-########################################################################
 # Workspace aliases
 ########################################################################
 
-alias ade='telnet 172.20.0.253 23'
 
-alias dt='cd /c/DXL-Tools'
-alias dtl='cd /c/DXL-Tools-LR'
-alias kc='cd /c/KC46'
-alias tc='cd /c/TC'
+# The git repo that stores the .vimrc and .bashrc
+alias dotfiles='cd /usr/local/share/dotfiles'
 
-########################################################################
-# ELM Team
-########################################################################
+# Location for Palworld server install from SteamCMD
+alias palserver='cd /home/steam/.local/share/Steam/steamapps/common/PalServer'
 
-# NOTE:
-# The second alias overwrites the first one.
-# Keep whichever one you actually want.
+# Palworld Config git repo
+alias palconfig='cd /home/jarod/git/palworld-server-config'
 
-alias elm='cd /c/ELM'
-alias elm='cd /c/ELM/avalm-central'
-
-alias front='cd /c/ELM/avalm-central/frontend'
-alias back='cd /c/ELM/avalm-central/backend'
-
-alias runelm='cd /c/ELM/avalm-central/backend; pwd; echo "npm run build"; npm run build; cd /c/ELM/avalm-central/frontend; pwd; echo "npm run build"; npm run build; cd /c/ELM/avalm-central/backend; pwd; echo "node ."; node .'
-
-alias buildelm='cd /c/ELM/avalm-central/backend; pwd; echo "npm run build"; npm run build; cd /c/ELM/avalm-central/frontend; pwd; echo "npm run build"; npm run build; cd /c/ELM/avalm-central/backend; pwd'
 
 ########################################################################
 # Application shortcuts
@@ -99,6 +91,9 @@ alias v='devenv'
 
 alias f='find -iname'
 alias p='python'
+
+# Sends output to the clipboard: tree -L 3 | clip
+alias clip='xclip -selection clipboard'
 
 alias gitc='git checkout'
 
@@ -204,6 +199,16 @@ gitcpp() {
 }
 export gitcpp
 
+gitcp() {
+    date
+    gs
+    ga.
+    git commit -m "$1"
+    git push
+    date
+}
+export gitcp
+
 # Tag a commit and push the tag.
 #
 # Usage:
@@ -231,33 +236,6 @@ gitTagPush() {
     echo "Tag $tag_name created and pushed successfully!"
 }
 export gitTagPush
-
-########################################################################
-# Tree replacement (Git Bash)
-########################################################################
-
-# Git Bash didn't include tree.
-#
-# Options:
-#   -d  Directories only
-#   -f  Full path
-#   -l  Exclude wildcard
-#   -p  Omit directory
-#   -t  Sort by modification time
-#   -s  Show file sizes
-#   -D  Show modification dates
-#   -r  Reverse sort
-
-tree() {
-    cmd_command="cmd //c tree //a"
-
-    for arg in "$@"; do
-        cmd_command+=" //$arg"
-    done
-
-    $cmd_command
-}
-export tree
 
 ########################################################################
 # File helpers
