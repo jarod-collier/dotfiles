@@ -78,6 +78,9 @@ alias dotfiles='cd /usr/local/share/dotfiles'
 # Location for Palworld server install from SteamCMD
 alias palserver='cd /home/steam/.local/share/Steam/steamapps/common/PalServer'
 
+# Pal server ini config file path
+alias palini='cd /home/steam/.local/share/Steam/steamapps/common/PalServer/Pal/Saved/Config/LinuxServer'
+
 # Palworld Config git repo
 alias palconfig='cd /home/jarod/git/palworld-server-config'
 
@@ -240,6 +243,15 @@ export gitTagPush
 ########################################################################
 # File helpers
 ########################################################################
+
+# Makes the files, sets it to executable, then opens it in vim
+vimch() {
+    touch "$1"
+    chmod +x "$1"
+    vim "$1"
+}
+export vimch
+
 
 # Recursively list files while ignoring a folder.
 # Defaults to ignoring node_modules.

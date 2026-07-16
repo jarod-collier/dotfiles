@@ -15,8 +15,11 @@ colorscheme koehler
 syntax enable                        " Enable syntax highlighting
 
 set number                           " Show line numbers
-set colorcolumn=130                  " Draw a guide at column 130
-set nowrap                           " Do not wrap long lines
+
+set wrap                    " Visually wrap long lines
+set linebreak               " Wrap at word boundaries when possible
+set breakindent             " Preserve indentation on wrapped lines
+set showbreak=>>\
 
 set ruler                            " Always show cursor position
 set laststatus=2                     " Always display the status line
