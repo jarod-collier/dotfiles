@@ -33,7 +33,7 @@ alias .....='cd ../../../../'
 alias rm='rm -I'
 alias untar='tar -xf'
 
-alias e='explorer'
+alias e='xdg-open'
 
 alias bashrc='vim ~/.bashrc'
 alias vimrc='vim ~/.vimrc'
@@ -45,6 +45,8 @@ alias vrc='dotfiles; vim vimrc; cd -'
 alias sbrc='source ~/.bashrc'
 
 alias s='sudo --preserve-env=DISPLAY,XAUTHORITY -u steam -s'
+
+alias treedu='tree --du -h'
 
 ########################################################################
 # Navigation helpers
@@ -93,10 +95,8 @@ alias c='code'
 alias v='devenv'
 
 alias f='find -iname'
-alias p='python'
+alias p='python3'
 
-# Sends output to the clipboard: tree -L 3 | clip
-alias clip='xclip -selection clipboard'
 
 alias gitc='git checkout'
 
@@ -108,6 +108,39 @@ alias gr.='git restore .; gs'
 alias grs.='git restore --staged .; gs'
 
 alias gitcam='gs; git commit -a -m'
+
+########################################################################
+# CRON Management
+########################################################################
+
+# Example usage: cronpal "24 hours ago" or just "cronpal"
+function cronpal() {
+    journalctl -u cron --since "${1:-6 hours ago}" | grep palworld
+}
+
+########################################################################
+# Copy text commands
+########################################################################
+
+# Sends output to the clipboard: tree -L 3 | clip
+alias clip='xclip -selection clipboard'
+
+# Copy command + output to clipboard
+clipc() {
+    if [[ $# -eq 0 ]]; then
+        echo "Usage: clipc <command>"
+        return 1
+    fi
+
+    local cmd="$*"
+
+    {
+        echo "\$ $cmd"
+        echo
+        eval "$cmd"
+    } 2>&1 | xclip -selection clipboard
+}
+
 
 ########################################################################
 # Visual Studio / VS Code helpers
