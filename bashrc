@@ -141,6 +141,19 @@ clipc() {
     } 2>&1 | xclip -selection clipboard
 }
 
+# Copy a file's contents to the clipboard with the command shown
+clipcc() {
+    if [[ $# -eq 0 ]]; then
+        echo "Usage: clipcat <file> [file...]"
+        return 1
+    fi
+
+    {
+        echo "\$ cat $*"
+        echo
+        cat "$@"
+    } | xclip -selection clipboard
+}
 
 ########################################################################
 # Visual Studio / VS Code helpers
